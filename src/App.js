@@ -35,7 +35,6 @@ class App extends Component {
               ...snapshot.data(),
             },
           });
-          console.log(this.state);
         });
       } else {
         // in this case we know the user is null => not authenticated

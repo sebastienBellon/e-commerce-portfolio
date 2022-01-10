@@ -5,33 +5,37 @@ import { connect } from "react-redux";
 import { selectCartItems } from "../../redux/cart/cart.selector";
 import { toggleCartVisibility } from "../../redux/cart/cart.actions";
 
-import "./cart-dropdown.style.scss";
+import {
+  CartDropDownContainer,
+  CartItemsContainer,
+  EmptyMessageContainer,
+  CartDropdownButton,
+} from "./cart-dropdown.styles";
 
-import CustomButton from "../custom-button/custom-button.component";
 import CartItem from "../cart-item/cart-item.component";
 
 const CartDropDown = ({ cartItems, toggleCartVisibility }) => {
   let navigate = useNavigate();
   return (
-    <div className="cart-dropdown">
-      <div className="cart-items">
+    <CartDropDownContainer>
+      <CartItemsContainer>
         {cartItems.length ? (
           cartItems.map((cartItem) => (
             <CartItem key={cartItem.id} item={cartItem} />
           ))
         ) : (
-          <span className="empty-message">Your cart is empty </span>
+          <EmptyMessageContainer>Your cart is empty </EmptyMessageContainer>
         )}
-      </div>
-      <CustomButton
+      </CartItemsContainer>
+      <CartDropdownButton
         onClick={() => {
           navigate(`/checkout`);
           toggleCartVisibility();
         }}
       >
         GO TO CHECKOUT
-      </CustomButton>
-    </div>
+      </CartDropdownButton>
+    </CartDropDownContainer>
   );
 };
 

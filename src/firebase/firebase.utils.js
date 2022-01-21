@@ -1,6 +1,13 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  collection,
+  writeBatch,
+} from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAEe7flDcBvaSz8hX5p523zgzV6X_oCKZ0",
@@ -34,6 +41,18 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
     }
   }
   return userRef;
+};
+
+export const addCollectionsAndDocuments = async (
+  collectionKey,
+  objectToAdd
+) => {
+  const batch = writeBatch(db);
+  objectToAdd.forEach((element) => {
+    const docRef = doc(collection(db, collectionKey));
+    batch.set(docRef, element);
+  });
+  return await batch.commit();
 };
 
 initializeApp(firebaseConfig);

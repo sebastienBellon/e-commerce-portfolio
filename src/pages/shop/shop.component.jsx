@@ -13,7 +13,10 @@ import CollectionPage from "../collection/collection.component";
 // } from "../../firebase/firebase.utils";
 
 import { fetchCollectionsStartAsync } from "../../redux/shop/shop.actions";
-import { selectIsCollectionFetching } from "../../redux/shop/shop.selector";
+import {
+  selectIsCollectionFetching,
+  selectIsCollectionsLoaded,
+} from "../../redux/shop/shop.selector";
 
 import WithSpinner from "../../components/with-spinner/with-spinner.component";
 
@@ -21,16 +24,7 @@ const CollectionsOverviewWithSpinner = WithSpinner(CollectionOverview);
 const CollectionPageWithSpinner = WithSpinner(CollectionPage);
 
 class ShopPage extends Component {
-  //unsubscribeFromSnapshot = null;
-
   componentDidMount() {
-    // const { updateCollection } = this.props;
-    // const collectionRef = collection(db, "collections");
-    // onSnapshot(collectionRef, (snapshot) => {
-    //   const collectionMap = convertCollectionSnapshotToMap(snapshot);
-    //   updateCollection(collectionMap);
-    //   this.setState({ loading: false });
-    // });
     const { fetchCollectionsStartAsync } = this.props;
     fetchCollectionsStartAsync();
   }
@@ -38,7 +32,7 @@ class ShopPage extends Component {
   componentWillUnmount() {}
 
   render() {
-    const { isCollectionFetching } = this.props;
+    const { isCollectionFetching, isCollectionsLoaded } = this.props;
     return (
       <div className="shop-page">
         <Routes>
@@ -55,7 +49,7 @@ class ShopPage extends Component {
             path=":collectionId"
             element={
               <CollectionPageWithSpinner
-                isLoading={isCollectionFetching}
+                isLoading={!isCollectionsLoaded}
                 {...this.props}
               />
             }
@@ -72,6 +66,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 const mapStateToProps = createStructuredSelector({
   isCollectionFetching: selectIsCollectionFetching,
+  isCollectionsLoaded: selectIsCollectionsLoaded,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ShopPage);
